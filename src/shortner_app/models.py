@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.db.models.signals import post_save
 
 class UrlShortner(models.Model):
-    url = models.CharField(max_length=220, validators=[validataURL], unique = True)
+    url = models.TextField(validators=[validataURL], unique = True)
     hash = models.CharField(max_length = 8, unique = True, blank = True)
     timestamp = models.DateTimeField(auto_now = False, auto_now_add= True)
     active = models.BooleanField(default = True)

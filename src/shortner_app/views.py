@@ -14,10 +14,11 @@ import json
 class ShortenSingleApiView(ShortenApiMixin):
     def post(self, request, *args, **kwargs):
         long_url = self.request.data['long_url']
+        print(long_url)
         try:
             object = self.get_or_create(long_url)
             short_uri = request.get_host() + "/" + object.hash
-
+            print(short_uri)
             data = {
                 "short_url": short_uri,
                 "status": "OK",
@@ -144,6 +145,7 @@ class FetchAccessCountView(APIView):
 
 @csrf_exempt
 def cleanURLS(request):
+    print(UrlShortner.objects.all())
     UrlShortner.objects.all().delete()
     return JsonResponse({"status": "OK"}, status=200)
     

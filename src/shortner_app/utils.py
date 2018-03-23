@@ -7,6 +7,6 @@ def createHash(instance, max_size=8):
     Klass = instance.__class__
     qs = Klass.objects.filter(hash=newHash)
     if qs.exists():
-        return createHash(instance, max_size=max_size)
+        createHash(instance, max_size=max_size)
     return newHash
 

@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Url Shortner</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">Shorten Url</h4>
+                        <p class="text-muted">This is an example based page to demonstrate the url shortner API</p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                        <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="#" class="text-white">Follow on Twitter</a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-white">Like on Facebook</a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-white">Email me</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark box-shadow">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <strong>Shorten URL</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="jumbotron-heading">Shorten your URL</h1>
+                <p class="lead text-muted">Sharing the long tidy url with others is complicated, instead share the tiny short url for the same big URL</p>
+                <p>
+                    <a href="https://github.com/jai-singhal/url-shortner" class="btn btn-primary my-2">Github Repo</a>
+                    <a href="https://github.com/jai-singhal/" class="btn btn-secondary my-2">Github Profile</a>
+                </p>
+            </div>
+        </section>
+
+        <div class = "container">
+            <h1>Short Url</h1>
+            <form id = "singleURLForm">{% csrf_token %}
+                <div class="input-group">
+                    <input type="url" id ="singleUrl" name = "long_url" class="form-control" placeholder="Paste your url" required>
+                    <div class="invalid-feedback">
+                        Please enter Valid URL
+                    </div>
+                    <span class="input-group-btn">
+                        <button 
+                            class="btn btn-outline-primary" 
+                            data-toggle="tooltip" 
+ 
+                            id = "singleUrlsubmit_btn" 
+                            type="submit">Go!</button>
+                    </span>
+                </div>
+            </form>
+            <br>
+            <div class = "shorten_url_box">
+                <center>
+                    Shorten URL
+                    <input type="url" id = "shorten_url" name = "shorten_url">
+                    <button class="btn btn-sm btn-primary" id = "copy_sh_url_btn" 
+                    data-placement="bottom" title="Copied" 
+                    data-clipboard-target="#shorten_url">Copy</button>
+                </center>
+            </div>
+ 
+        </div>
+        
+    </main>
+
+    <footer class="text-muted" style="margin-top:200px;">
+        <div class="container">
+            <p>Powered by Bootstrap 4</p>
+        </div>
+    </footer>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $("#copy_sh_url_btn").click(function () {
+            $(this).text("Copied!!");
+        })
+        $(".shorten_url_box").hide();
+        $("#singleURLForm").submit(function(e){
+            e.preventDefault();
+            var formData = $(this).serializeArray();
+            var url = formData[1]['value'];
+            $.ajax({
+                url: "/fetch/short-url/",
+                type: "POST",
+                data: formData,
+                success: function(response){
+                    $(".shorten_url_box").show();
+                    $("#shorten_url").val(response['short_url']);
+                },
+                error: function(response){
+                    console.log(response);
+                }
+                
+            })
+        })
+    })
+</script>
+
+</body>
+
+</html>

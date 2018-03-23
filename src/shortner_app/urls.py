@@ -1,4 +1,5 @@
 from django.urls import path, re_path
+from django.views.generic import TemplateView
 from .views import (
     ShortenSingleApiView,
     FetchLongUrlApiView,
@@ -6,7 +7,7 @@ from .views import (
     FetchLongListUrlApiView,
     shortURLView,
     FetchAccessCountView,
-    cleanURLS
+    cleanURLS,
 )
 
 urlpatterns = [
@@ -20,6 +21,7 @@ urlpatterns = [
     
     re_path('clean-urls/', cleanURLS),
     
+    path('', TemplateView.as_view(template_name="index.html")),
     re_path('(?P<hash>[a-z0-9]{1,8})', shortURLView),
     
     
